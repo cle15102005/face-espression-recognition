@@ -1,5 +1,5 @@
 import pandas as pd
-def load_data(train_csv, val_csv, min_samples=3000, samples_per_class=500):
+def load_data(train_csv, val_csv, min_samples=2000, samples_per_class=500):
     df = pd.read_csv(train_csv)
     val_df = pd.read_csv(val_csv)
 
