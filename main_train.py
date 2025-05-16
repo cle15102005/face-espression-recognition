@@ -23,7 +23,7 @@ def SRC_detect():
     
     option = input('Enable tuning: Y/n: ').upper()
     if option == "Y":
-        idx = np.random.choice(len(X_val_raw), size= 1000, replace=False)
+        idx = np.random.choice(len(X_val_raw), size= 900, replace=False)
         X_val_tune = X_val_raw[idx]
         y_val_tune = y_val[idx]
         params= src.hyperparameter_tuning(X_train_raw, y_train, X_val_tune, y_val_tune)
