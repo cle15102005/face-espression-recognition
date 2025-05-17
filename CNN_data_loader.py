@@ -1,4 +1,3 @@
-# data_loader.py
 import tensorflow as tf
 
 def load_data_and_generators(train_dir, val_dir, img_height, img_width, batch_size):
