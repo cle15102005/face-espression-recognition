@@ -13,7 +13,6 @@ class RF(object):
             'n_estimators': 100,
             'max_depth': None,
             'variance_threshold': 0.98,
-            'random_state': 42
         }
 
         for key, item in kwargs.items():
@@ -24,11 +23,10 @@ class RF(object):
         self.rf = RandomForestClassifier(
             n_estimators=self.params['n_estimators'],
             max_depth=self.params['max_depth'],
-            random_state=self.params['random_state']
+            random_state= 42
         )
         self.pca = PCA(n_components=self.params['variance_threshold'])
         self.scaler = StandardScaler()
-        return self.rf, self.pca, self.scaler
 
     def train(self, X_raw, y_train):
         self.create_model()

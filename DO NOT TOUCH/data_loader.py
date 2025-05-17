@@ -20,7 +20,8 @@ def flatten_image(folder, data_dir, categories, label_map):
             y.append(label)
     return np.array(X), np.array(y)
 
-def notknown():
+#generate csv file from image file
+def generate_csv():
     # Cấu hình thư mục
     data_dir = r"D:\images"
     categories = ["angry", "disgust", "fear", "happy","neutral", "sad", "surprise"]
@@ -44,7 +45,7 @@ def notknown():
     print("Xuất CSV thành công! File: train_face_emotion1.csv, val_face_emotion1.csv")
 
 #load data from csv file
-def load_data(train_csv, val_csv, min_samples=2000, samples_per_class=500):
+def load_data(train_csv, val_csv, min_samples=2000, samples_per_class=3000):
     df = pd.read_csv(train_csv)
     val_df = pd.read_csv(val_csv)
 

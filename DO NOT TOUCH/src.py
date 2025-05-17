@@ -25,7 +25,6 @@ class SRC:
         self.src = OrthogonalMatchingPursuit(n_nonzero_coefs=self.params['n_nonzero_coefs'])
         self.pca = PCA(n_components=self.params['variance_threshold'])
         self.scaler = StandardScaler()
-        return self.src, self.pca, self.scaler
     
     def train(self, X_raw, y_train):
         self.create_model()
@@ -42,6 +41,7 @@ class SRC:
         return normalize(X_pca, axis=1)
 
     def predict(self, X_test):
+        X_test = self.transform(X_test)
         preds = []
         unique_classes = np.unique(self.y_train)
 
