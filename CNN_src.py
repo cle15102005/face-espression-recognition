@@ -1,4 +1,3 @@
-# cnn_model.py
 import tensorflow as tf
 from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
