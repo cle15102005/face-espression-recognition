@@ -24,16 +24,23 @@ class CNNEmotionModel:
             tf.keras.layers.Conv2D(128, (3, 3), padding='same', activation='relu'),
             tf.keras.layers.BatchNormalization(),
             tf.keras.layers.MaxPooling2D((2, 2)),
-            tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Dropout(0.3),
 
             tf.keras.layers.Conv2D(256, (3, 3), padding='same', activation='relu'),
             tf.keras.layers.BatchNormalization(),
             tf.keras.layers.Conv2D(256, (3, 3), padding='same', activation='relu'),
             tf.keras.layers.BatchNormalization(),
             tf.keras.layers.MaxPooling2D((2, 2)),
-            tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Dropout(0.35),
 
-            tf.keras.layers.GlobalAveragePooling2D(),
+            #tf.keras.layers.Conv2D(512, (3, 3), padding='same', activation='relu'),
+            #tf.keras.layers.BatchNormalization(),
+            #tf.keras.layers.Conv2D(512, (3, 3), padding='same', activation='relu'),
+            #tf.keras.layers.BatchNormalization(),
+            #tf.keras.layers.MaxPooling2D((2, 2)),
+            #tf.keras.layers.Dropout(0.5),
+
+            tf.keras.layers.Flatten(),
             tf.keras.layers.Dense(512, activation='relu'),
             tf.keras.layers.BatchNormalization(),
             tf.keras.layers.Dropout(0.5),
@@ -41,23 +48,23 @@ class CNNEmotionModel:
         ])
 
         model.compile(
-            optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0005),
             loss='categorical_crossentropy',
-            metrics=['accuracy']
+            metrics=['accuracy', tf.keras.metrics.Recall(), tf.keras.metrics.Precision()]
         )
 
         return model
 
     def train(self, train_gen, val_gen, class_weights=None):
         callbacks = [
-            tf.keras.callbacks.EarlyStopping(patience=7, restore_best_weights=True),
+            tf.keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True),
             tf.keras.callbacks.ModelCheckpoint('best_model_improved.keras', save_best_only=True),
             tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, min_lr=1e-6)
         ]
 
         history = self.model.fit(
             train_gen,
-            epochs=30,
+            epochs=50,
             validation_data=val_gen,
             callbacks=callbacks,
             class_weight=class_weights

@@ -8,9 +8,9 @@ def main():
     # Tham số
     IMG_HEIGHT, IMG_WIDTH = 48, 48
     BATCH_SIZE = 64
-    NUM_CLASSES = 6
-    TRAIN_DIR = r'D:\PROJECT\virtual_env\Project ML\images\train'
-    VAL_DIR = r'D:\PROJECT\virtual_env\Project ML\images\validation'
+    NUM_CLASSES = 7
+    TRAIN_DIR = r'D:\PROJECT\virtual_env\Project ML\images_balanced\train'
+    VAL_DIR = r'D:\PROJECT\virtual_env\Project ML\images_balanced\validation'
 
     # Load dữ liệu
     train_gen, val_gen = load_data_and_generators(TRAIN_DIR, VAL_DIR, IMG_HEIGHT, IMG_WIDTH, BATCH_SIZE)
