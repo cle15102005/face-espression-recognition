@@ -1,14 +1,14 @@
-# Dùng Python 3.10 làm môi trường gốc
+# Environment
 FROM python:3.12
 
-# Tạo thư mục làm việc trong container
+# Work dir in container
 WORKDIR /app
 
-# Copy toàn bộ nội dung thư mục hiện tại (code, CSV, ảnh, model) vào container
+# Copy all from this folder
 COPY . .
 
-# Cài thư viện cần thiết
+# Requirements libraries
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Lệnh mặc định khi chạy container (nếu không chỉ rõ lệnh)
+# Default command when run container
 CMD ["python", "main_train.py"]
