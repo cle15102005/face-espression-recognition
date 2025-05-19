@@ -1,5 +1,5 @@
 import numpy as np
-import data_loader, eval, svm, rf, src
+import data_loader, eval, svm, rf, src, xgb
 import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="sklearn.linear_model._omp")
 
@@ -23,10 +23,12 @@ def detect(model_name):
     elif model_name == 'SRC':
         params = {'n_nonzero_coefs' : 30, 'variance_threshold' : 0.95}
         detector = src.SRC(**params)
-    
-    #tuning option, just for rf and src
+    elif model_name == 'XGB':
+        params = {'n_estimators': 100, 'max_depth': 6, 'learning_rate': 0.1, 'variance_threshold': 0.98, 'random_state': 42}
+        detector = xgb.XGB(**params)
+    #tuning option
     option = input('(?) Enable tuning (Y/n): ').upper()
-    if option == "Y":
+    if option == "Y" and model_name != 'SVM':
         idx = np.random.choice(len(X_val), size= 600, replace=False)
         X_val_tune = X_val[idx]
         y_val_tune = y_val[idx]
@@ -44,5 +46,5 @@ def detect(model_name):
     eval.evaluate(model_name, y_val, y_pred)
 
 if __name__ == '__main__':
-    model_name = input('(?) Enter model name (SVM/RF/SRC): ').upper()
+    model_name = input('(?) Enter model name (SVM/RF/SRC/XGB): ').upper()
     detect(model_name)
