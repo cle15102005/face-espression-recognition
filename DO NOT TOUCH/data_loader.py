@@ -1,5 +1,5 @@
 import pandas as pd
-
+from keras import preprocessing
 import numpy as np
 import pandas as pd
 import os
@@ -44,6 +44,73 @@ def generate_csv():
 
     print("Xuất CSV thành công! File: train_face_emotion1.csv, val_face_emotion1.csv")
 
+def limit_sample():
+    # === Load file gốc ===
+    train_df = pd.read_csv("train_face_emotion_limited.csv")
+    val_df = pd.read_csv("val_face_emotion_limited.csv")
+
+    # === Lấy mỗi lớp 3000 mẫu từ train ===
+    train_filtered = (
+        train_df.groupby('label', group_keys=False)
+        .apply(lambda x: x.sample(n=3000, random_state=42))
+    )
+
+    # === Lấy mỗi lớp 900 mẫu từ validation ===
+    val_filtered = (
+        val_df.groupby('label', group_keys=False)
+        .apply(lambda x: x.sample(n=900, random_state=42))
+    )
+
+    # === Gán chỉ số dòng (Image x) ===
+    train_filtered.index = [f"Image {i+1}" for i in range(len(train_filtered))]
+    val_filtered.index = [f"Image {i+1}" for i in range(len(val_filtered))]
+
+    # === Xuất ra file mới ===
+    train_filtered.to_csv("emotional_train_limited.csv", index=True, index_label="Image")
+    val_filtered.to_csv("emotional_val_limited.csv", index=True, index_label="Image")
+
+    print("✅ Đã xuất 2 file giới hạn mẫu theo mỗi lớp:")
+    print("   ➤ emotional_train_limited.csv (3000/lớp)")
+    print("   ➤ emotional_val_limited.csv (900/lớp)")
+
+def image_augmentation():
+    input_dir = r"D:\images\validation\disgust"# Thư mục chứa ảnh disgust gốc (48x48 hoặc lớn hơn)
+    output_dir = "augmented_disgust_val"      # Thư mục xuất ảnh tăng cường
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Tạo bộ biến đổi dữ liệu
+    datagen = preprocessing.image.ImageDataGenerator(
+        rotation_range=15,
+        width_shift_range=0.1,
+        height_shift_range=0.1,
+        zoom_range=0.1,
+        brightness_range=(0.8, 1.2),
+        horizontal_flip=True,
+        fill_mode='nearest'
+    )
+
+    # Số ảnh tăng cường muốn tạo mỗi ảnh gốc
+    AUG_PER_IMAGE = 4
+
+    count = 0
+    for fname in os.listdir(input_dir):
+        if fname.lower().endswith(('.jpg', '.png')):
+            img_path = os.path.join(input_dir, fname)
+            img = preprocessing.image.load_img(img_path, color_mode='grayscale', target_size=(48, 48))
+            x = preprocessing.image.img_to_array(img)
+            x = x.reshape((1,) + x.shape)
+
+            # Tạo ảnh mới từ ảnh gốc
+            i = 0
+            for batch in datagen.flow(x, batch_size=1, save_to_dir=output_dir,
+                                    save_prefix="aug", save_format='png'):
+                i += 1
+                count += 1
+                if i >= AUG_PER_IMAGE:
+                    break
+
+    print(f"✅ Đã tạo {count} ảnh tăng cường từ thư mục {input_dir}")
+    
 #load data from csv file
 def load_data(train_csv, val_csv, min_samples=2000, samples_per_class=3000):
     df = pd.read_csv(train_csv)
