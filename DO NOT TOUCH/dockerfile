@@ -1,0 +1,14 @@
+# Environment
+FROM python:3.12
+
+# Work dir in container
+WORKDIR /app
+
+# Copy all from this folder
+COPY . .
+
+# Requirements libraries
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Default command when run container
+CMD ["python", "main_train.py"]
