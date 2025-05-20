@@ -17,4 +17,3 @@ if error occur.
 ### 2. Run models
 - For SVM, RF, SRC, XGB: docker run -it face-emotion-app
 - For CNN: docker run -it face-emotion-app python CNN_main_train.py
-

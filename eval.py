@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def evaluate(self, y_true, y_pred):
+def evaluate(y_true, y_pred):
         # Mapping numeric labels to expression names
         label_to_expression = {
             0: "Angry",
@@ -37,4 +37,6 @@ def evaluate(self, y_true, y_pred):
         plt.xlabel("Predicted")
         plt.ylabel("True")
         plt.tight_layout()
+        plt.savefig('')
         plt.show()
+        

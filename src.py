@@ -12,8 +12,8 @@ class SRC:
         
         # Default parameter values.
         params = {
-        'n_nonzero_coefs' : 50, 
-        'variance_threshold' : 0.98,        
+        'n_nonzero_coefs' : 50,         #control sparsity
+        'variance_threshold' : 0.98,    #control how much variance PCA should retain  
         }
         
         #Adjust parameters
@@ -69,8 +69,8 @@ class SRC:
         best_f1 = -1
         best_params = {}
 
-        nonzeros = [10, 30, 50, 70]
-        variances = [0.95, 0.98, 0.99]
+        nonzeros = [10, 20, 30, 50, 70, 100]
+        variances = [0.905, 0.95, 0.98, 0.99, 0.995, 0.9995]
         total = len(nonzeros) * len(variances)
 
         with tqdm(total=total, desc="Hyperparameter Search") as pbar:
@@ -91,5 +91,5 @@ class SRC:
 
                     pbar.update(1)
 
-        print(f"Best Parameters Found: {best_params}")
+        print(f"Best parameters found: {best_params}")
         self.params = best_params  # Update model with best parameters
